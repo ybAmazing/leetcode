@@ -1,0 +1,43 @@
+public class Solution {
+    public static char[][] books = new char[10][];
+    public static int len = 0;
+    public static StringBuilder sb = new StringBuilder();
+    public static char[] chars;
+    public static List<String> res = new ArrayList<String>();
+    static{
+        books[0] = new char[1];
+        books[1] = null;
+        books[0][0] = ' ';
+        books[2] = new char[]{'a', 'b', 'c'};
+        books[3] = new char[]{'d', 'e', 'f'};
+        books[4] = new char[]{'h', 'i', 'g'};
+        books[5] = new char[]{'j', 'k', 'l'};
+        books[6] = new char[]{'m', 'n', 'o'};
+        books[7] = new char[]{'p', 'q', 'r', 's'};
+        books[8] = new char[]{'v', 't', 'u'};
+        books[9] = new char[]{'w', 'x', 'y', 'z'};
+    }
+    
+    public void DFS(int d){
+        if( d == len ){
+            res.add(sb.toString());
+            return;
+        }
+        int ind = chars[d] - '0';
+        int cnt = books[ind].length;
+        for(int i = 0; i < cnt; i++){
+            sb.append(books[ind][i]);
+            DFS(d + 1);
+            sb.replace(d, d+1, "");
+        }
+    }
+    public List<String> letterCombinations(String digits) {
+        res.clear();
+        if( digits == null || digits.length() == 0)
+            return res;
+        chars = digits.toCharArray();
+        len = chars.length;
+        DFS(0);
+        return res;
+    }
+}

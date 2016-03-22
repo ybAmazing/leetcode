@@ -1,0 +1,101 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+ 
+int *heap;
+int *mark;
+int heapSize;
+
+void swap(int i,int j){
+    int t = heap[i];
+    heap[i] = heap[j];
+    heap[j] = t;
+    t = mark[i];
+    mark[i] = mark[j];
+    mark[j] = t;
+}
+
+void adjust(int x, int sum){
+    int index;
+    if(x * 2 + 1 <= sum){
+        index = heap[x*2] < heap[x*2+1] ? x*2 : x*2+1;
+    }else{
+        index = x*2;
+    }
+    if(index <= sum && heap[x] > heap[index]){
+        int t = heap[x];
+        heap[x] = heap[index];
+        heap[index] = t;
+        t = mark[x];
+        mark[x] = mark[index];
+        mark[index] = t;
+        adjust(index, sum);
+    }
+}
+
+void init(struct ListNode** lists, int listsSize){
+    heap = (int*)malloc(sizeof(int) * ( 1 + listsSize));
+    mark = (int*)malloc(sizeof(int) * ( 1 + listsSize));
+    heapSize = 0;
+    for(int i = 0; i < listsSize; i++){
+        if(lists[i] == NULL){
+            continue;
+        }
+        heap[heapSize+1] = lists[i]->val;
+        mark[heapSize+1] = i;
+        heapSize++;
+    }
+    int end = listsSize / 2;
+    for(int i = end; i > 0; i--){
+        adjust(i, heapSize);
+    }
+}
+
+void insert(int num, int i, int m){
+    heap[i] = num;
+    mark[i] = m;
+    int p = i / 2;
+    int temp = num;
+    while( p > 0){
+        if( heap[p] <= temp){
+            break;
+        }
+        swap(p,i);
+        i = p;
+        p = i / 2;
+    }
+}
+
+struct ListNode* mergeKLists(struct ListNode** lists, int listsSize) {
+    //return lists[0];
+    struct ListNode *head = (struct ListNode*)malloc(sizeof(struct ListNode));
+    head->next = NULL;
+    struct ListNode *p = head;
+    init(lists, listsSize);
+    while(heapSize > 0){
+        struct ListNode *node = (struct ListNode*)malloc(sizeof(struct ListNode));
+		swap(1,heapSize);
+        node->val = heap[heapSize];
+        node->next = NULL;
+        p->next = node;
+        p = p->next;
+        int m = mark[heapSize];
+		heapSize--;
+		adjust(1,heapSize);
+        if(lists[m]->next == NULL){
+            
+        }else{
+            lists[m] = lists[m]->next;
+            insert(lists[m]->val, ++heapSize, m);
+        }
+    }
+    return head->next;
+}
+
+
+
+

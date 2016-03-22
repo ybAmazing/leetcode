@@ -1,0 +1,33 @@
+char* convert(char* s, int numRows) {
+    if(numRows == 1){
+        return s;
+    }
+    int len = strlen(s);
+    char *res = (char*)malloc(sizeof(char) * (len + 1));
+    char *p = res;
+    for(int i = 0; i < numRows; i++){
+        int j = i;
+        if(j == 0 || j == numRows-1){
+            while( j < len){
+                *p = s[j];
+                p++;
+                j = j + 2 * numRows -2;
+            }
+        }else{
+            int cnt = 0, index1 = j, index2 = 2 * numRows -2 - j;
+            while( index1 < len || index2 < len ){
+                if( cnt % 2 == 0){
+                    *p = s[index1];
+                    index1 += 2 * numRows -2;
+                }else{
+                    *p = s[index2];
+                    index2 += 2 * numRows -2;
+                }
+                p++;
+                cnt++;
+            }
+        }
+    }
+    *p = 0;
+    return res;
+}

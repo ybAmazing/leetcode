@@ -1,0 +1,32 @@
+public class Solution {
+    public int divide(int dividend, int divisor) {
+        if((dividend == Integer.MIN_VALUE && divisor == -1) || divisor == 0)
+            return Integer.MAX_VALUE;
+    //    if(divisor == Integer.MIN_VALUW)        return 0;
+        boolean flag1 = true, flag2 = true;
+        if(dividend > 0)    { dividend = -dividend; flag1 = false;}
+        if(divisor > 0)     { divisor = -divisor;   flag2 = false;}
+        flag1 = !(flag1 ^ flag2);
+        int upper = divisor;
+        int cnt = 0;
+        LinkedList<Integer> list = new LinkedList<Integer>();
+        while(upper >= dividend){
+            list.add(upper);
+            if(upper < Integer.MIN_VALUE - upper)
+                break;
+            upper += upper;
+        }
+        int res = 0, now; 
+        while( list.size() != 0){
+            now = list.getLast();
+            if( dividend - now <= 0){
+                res -= 1 << (list.size()-1);
+                dividend -= now;
+            }
+            list.removeLast();
+        }
+        if(res == Integer.MIN_VALUE && flag1 == true)
+            return Integer.MAX_VALUE;
+        return flag1 ? -res : res;
+    }
+}

@@ -1,0 +1,56 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+ 
+typedef struct node{
+    int index;
+    int value;
+}node;
+ 
+int search(struct node* nums,int l,int r,int key){
+    int mid;
+    while( l <= r){
+        /*mid = (l + r) >> 1;
+        if(nums[mid] <= key){
+            l = mid + 1;
+        }else{
+            r = mid - 1;
+        }*/
+        mid = (l + r) >> 1;
+        if(nums[mid].value == key){
+            return mid;
+        }else if(nums[mid].value > key){
+            r = mid - 1;
+        }else{
+            l = mid + 1;
+        }
+    }
+    return -1;
+}
+
+int cmp(const void* a,const void* b){
+    return (*(struct node*)a).value - (*(struct node*)b).value;
+}
+ 
+
+int* twoSum(int* nums, int numsSize, int target) {
+    int *res = (int*)malloc(sizeof(int) * 2);
+    
+    struct node* nodes = malloc(sizeof(struct node) * numsSize);
+    for(int i = 0; i < numsSize; i++){
+        nodes[i].index = i + 1;
+        nodes[i].value = nums[i];
+    }
+    qsort(nodes,numsSize,sizeof(node),cmp);
+
+    for(int i = 0; i < numsSize; i++){
+        int r = search(nodes,0,numsSize -1,target - nums[i]);
+        //if(r != numsSize && (nums[r] + nums[i]) == target){
+        if( r != -1 && nodes[r].index != i + 1){
+            r = nodes[r].index;
+            res[0] = i+1 < r ? i+1 : r;
+            res[1] = i+1 < r ? r : i+1;
+            return res;
+        } 
+    }
+}

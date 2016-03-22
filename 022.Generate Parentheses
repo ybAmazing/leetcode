@@ -1,0 +1,19 @@
+public class Solution {
+    private List<String> res = new ArrayList<String>();
+    private void DFS(int n, int l, int r, String s){
+        if( r > l || l > n || r > n)
+            return;
+        if(l + r == n * 2 && l == n && r ==n ){
+            res.add(s);
+            return ;
+        }
+        DFS(n, l+1 , r, s+'(');
+        DFS(n, l, r+1, s + ')');
+    }
+    public List<String> generateParenthesis(int n) {
+            res.clear();
+            String now = "";
+            DFS(n, 0, 0, now);
+            return res;
+    }
+}

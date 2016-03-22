@@ -1,0 +1,22 @@
+public class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int len = nums.length , now = nums[0] + nums[1] + nums[2];
+        for(int i = 0; i < len-2; i++){
+            int j = i+1, k = len -1;
+            while(j < k){
+                if(Math.abs(target - now) > Math.abs(target - nums[i] - nums[j] - nums[k])){
+                    now = nums[i] + nums[j] + nums[k];
+                }
+                if( target - nums[i] < nums[j] + nums[k]){
+                    k--;
+                }else if(target - nums[i] > nums[j] + nums[k]){
+                    j++;
+                }else{
+                    return target;
+                }
+            }
+        }
+        return now;
+    }
+}

@@ -1,0 +1,36 @@
+public class Solution {
+    public static LinkedList<Character> stack = new LinkedList<Character>();
+    public boolean isValid(String s) {
+        stack.clear();
+        char[] chs = s.toCharArray();
+        for(char ch : chs){
+            switch(ch){
+                case ')':
+                    if(stack.size() > 0 && stack.getFirst() == '('){
+                        stack.pop();
+                    }else{
+                        return false;
+                    }
+                    break;
+                case ']':
+                    if(stack.size() > 0 && stack.getFirst() == '['){
+                        stack.pop();
+                    }else{
+                        return false;
+                    }
+                    break;
+                case '}':
+                    if(stack.size() > 0 && stack.getFirst() == '{'){
+                        stack.pop();
+                    }else{
+                        return false;
+                    }
+                    break;
+                default:
+                    stack.push(ch);
+                    
+            }
+        }
+        return stack.size() == 0 ? true : false;
+    }
+}
